@@ -2,24 +2,32 @@ name: teste html
 
 on: 
   push: 
-    branches: ["main']
+    branches: ["main"]
 
-job:
-  teste-html
+jobs:
+  teste-html:
     runs-on: ubuntu-latest
 
     steps: 
-      name: testar h1
-      uses: action/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
 
-      name: configurar node.js
-      uses: action/setup-node@v4
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
 
-      with: 
-      node-version: 20
+      - name: Instalar dependências
+        run: npm install
 
-      name: dependencias
-      uses: npm install
+      - name: Rodar testes
+        run: npm test
 
-      name: rodar teste
-      uses: npm test
+      - name: Fabricar o produto
+        run: echo '<h1>Este é o nosso produto final!</h1>' > produto.txt
+
+      - name: Upload do artefato
+        uses: actions/upload-artifact@v3
+        with:
+          name: pacote-do-produto
+          path: produto.txt
