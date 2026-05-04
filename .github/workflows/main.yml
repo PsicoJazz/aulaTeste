@@ -1,33 +1,22 @@
-name: teste html
+name: Teste de HTML (verificar H1)
 
-on: 
-  push: 
+on:
+  push:
     branches: ["main"]
 
 jobs:
-  teste-html:
+  verificar-h1:
     runs-on: ubuntu-latest
 
-    steps: 
-      - name: Checkout
+    steps:
+      - name: Baixar o código
         uses: actions/checkout@v4
 
-      - name: Configurar Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-
-      - name: Instalar dependências
-        run: npm install
-
-      - name: Rodar testes
-        run: npm test
-
-      - name: Fabricar o produto
-        run: echo '<h1>Este é o nosso produto final!</h1>' > produto.txt
-
-      - name: Upload do artefato
-        uses: actions/upload-artifact@v3
-        with:
-          name: pacote-do-produto
-          path: produto.txt
+      - name: Verificar se existe <h1>
+        run: |
+          if grep -Eiq "<h1[^>]*>" index.html; then
+            echo " Encontramos a tag <h1>!"
+          else
+            echo " Não encontramos a tag <h1>!"
+            exit 1
+          fi
